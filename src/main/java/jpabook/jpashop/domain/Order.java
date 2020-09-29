@@ -13,20 +13,38 @@ public class Order {
     @Column(name = "order_id")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToOne(mappedBy = "delivery")
+    @OneToOne(mappedBy = "delivery", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "delivery_id")
     private Delivery delivery;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)  //order만 저장 해도 같이 저장 됨 (같이 persist됨)
     private List<OrderItem> orderItems = new ArrayList<>();
 
     private LocalDateTime orderDate;  //주문시간. 하이버네이트가 알아서 매핑을 해줌
 
     @Enumerated(EnumType.STRING)
     private OrderStatus status; //주문 상태
+
+    //==양방향 연관관계 메서드 ==//
+    public void setMember(Member member){
+        this.member = member;
+        member.getOrders().add(this);  //양방향 연관관계에 걸리게함.
+    }
+
+    //==양방향 연관관계 메서드 ==//
+    public void addOrderItem(OrderItem orderItem){
+        orderItems.add(orderItem);
+        orderItem.setOrder(this);
+    }
+
+    //==양방향 연관관계 메서드 ==//
+    public void setDelivery(Delivery delivery){
+        this.delivery = delivery;
+        delivery.setOrder(this);
+    }
 
 }

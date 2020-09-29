@@ -23,6 +23,6 @@ public class Member {
     private Address address;
 
     @OneToMany(mappedBy = "member")  //order에 있는 member 필드에 의해 매핑된 거울 이다.
-    private List<Order> orders = new ArrayList<>();
+    private List<Order> orders = new ArrayList<>(); //컬렉션 자체를 바꾸지 말고 있는거 그 자체를 사용하기. persiste하면 하이버네이트가 원하는 메커티즘으로 동작 안할 수 있음
 
 }
