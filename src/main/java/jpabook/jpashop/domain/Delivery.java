@@ -5,6 +5,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+import static javax.persistence.FetchType.LAZY;
+
 @Entity
 @Getter
 @Setter
@@ -12,9 +14,9 @@ public class Delivery {
 
     @Id @GeneratedValue
     @Column(name = "delivery_id")
-    private String id;
+    private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = LAZY)
     private Order order;
 
     @Embedded
