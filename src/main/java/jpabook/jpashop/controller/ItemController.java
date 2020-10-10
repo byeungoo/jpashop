@@ -3,6 +3,7 @@ package jpabook.jpashop.controller;
 import jpabook.jpashop.domain.item.Book;
 import jpabook.jpashop.domain.item.Item;
 import jpabook.jpashop.service.ItemService;
+import jpabook.jpashop.service.UpdateItemDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -66,6 +67,10 @@ public class ItemController {
 
         //업데이트 권한 체크 필요
 
+        // 준영속 상태 객체. jpa에 한번 들어갔다 나온 얘. 식별자가 데이터베이스에 있는 객체를 준영속 상태 객체라고함
+        // 준영속 상태의 객체는 jpa가 관리하지 않기 때문에 변경 감지가 일어나지 않음.
+
+        /*
         Book book = new Book();
         book.setId(form.getId());
         book.setName(form.getName());
@@ -73,8 +78,18 @@ public class ItemController {
         book.setStockQuantity(form.getStockQuantity());
         book.setAuthor(form.getAuthor());
         book.setIsbn(form.getIsbn());
-
         itemService.saveItem(book);
+         */
+
+        //form은 service로 넘기면 지저분해짐. 웹계층에서만 쓰도록함.
+        UpdateItemDto updateItemDto = new UpdateItemDto();
+        updateItemDto.setItemId(itemId);
+        updateItemDto.setPrice(form.getPrice());
+        updateItemDto.setName(form.getName());
+        updateItemDto.setStockQuantity(form.getStockQuantity());
+        updateItemDto.setAuthor(form.getAuthor());
+        updateItemDto.setIsbn(form.getIsbn());
+        itemService.updateItem(updateItemDto);  //업데이트할꺼만 넘김.
 
         return "redirect:/";
     }
