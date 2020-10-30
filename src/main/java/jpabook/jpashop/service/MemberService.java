@@ -51,4 +51,9 @@ public class MemberService {
         return memberRepository.findOne(memberId);
     }
 
+    @Transactional
+    public void update(Long id, String name) {  //업데이트는 업데이트만하고, member를 다시 리턴하지는 않음. 리턴하면 id정도만 해서 다시 조회.
+        Member member = memberRepository.findOne(id);
+        member.setName(name);  //변경감지
+    }
 }
