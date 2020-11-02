@@ -113,13 +113,18 @@ public class OrderRepository {
         ).getResultList();
     }
 
-    //원하는거만 select함
-    public List<OrderSimpleQueryDto> findOrderDtos() {
-        return em.createQuery("select new jpabook.jpashop.repository.OrderSimpleQueryDto(o.id, m.name, o.orderDate, o.status, d.address) " +
-                "from Order o" +
-                " join o.member m" +
-                " join o.delivery d", OrderSimpleQueryDto.class)
-                .getResultList();
-
+    /*
+     * 일대다를 fetch join 하는 순간 페이징 불가 꼭 기억하기!!
+     * order와 orderItem은 일대다라 페이징 불가.
+     * 컬렉션 페치 조인은 1개만 사용하기.
+     */
+    public List<Order> findAllWithItem() {
+        return em.createQuery(
+                "select distinct o from Order o" +
+                        " join fetch o.member m" +
+                        " join fetch  o.delivery d" +
+                        " join fetch  o.orderItems oi" +
+                        " join fetch oi.item i", Order.class).
+                getResultList();
     }
 }
